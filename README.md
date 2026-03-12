@@ -1,8 +1,8 @@
 # chess-board
 
-Chess board UI library — render and interact with chess positions. Supports FEN, drag-and-drop, custom piece/board themes, arrows, last-move and legal-move highlights. Built to work with [@pech/chess-core](https://github.com/EduardoPech/chess-core) for rules and move validation.
+Chess board UI library — render and interact with chess positions. Supports FEN, drag-and-drop, custom piece/board themes, arrows, last-move and legal-move highlights. **Use [@pech/chess-core](https://eduardopech.github.io/chess-core/) to implement game logic** (rules, legal moves, validation).
 
-**Documentation:** [https://eduardopech.github.io/chess-board](https://eduardopech.github.io/chess-board)
+**See:** [Documentation and examples](https://eduardopech.github.io/chess-board)
 
 ## Install
 
@@ -83,9 +83,43 @@ board.destroy();
 - **Arrows:** `setArrows(arrows)`, `addArrow(from, to, color?)`, `removeArrow(from, to)`, `clearArrows()`.
 - **Lifecycle:** `destroy()`.
 
-## Integration with @pech/chess-core
+## Implementing the logic with chess-core
 
-Use [@pech/chess-core](https://github.com/EduardoPech/chess-core) for legal move generation and game state. In `onMove`, validate the move with the core and call `board.setPosition(game.fen())` (or similar) after applying it; return `false` to reject the move.
+We recommend using **[@pech/chess-core](https://eduardopech.github.io/chess-core/)** for all game logic: legal moves, move validation, FEN handling, and check/checkmate. Install it and wire it to the board:
+
+```bash
+npm install @pech/chess-core
+# or
+bun add @pech/chess-core
+```
+
+```ts
+import { ChessBoard, STARTING_FEN } from '@pech/chess-board';
+import { fromFen, toFen, getLegalMoves, makeMove, fromUci, toUci } from '@pech/chess-core';
+
+const container = document.getElementById('board')!;
+let position = fromFen(STARTING_FEN);
+
+const board = new ChessBoard(container, {
+  position: STARTING_FEN,
+  orientation: 'white',
+  draggable: true,
+  onMove(from, to) {
+    const move = fromUci(position, from + to);
+    if (!move) return false;
+
+    const newPos = makeMove(position, move);
+    board.setPosition(toFen(newPos));
+    board.setLastMove(from, to);
+    board.setLegalMoves(getLegalMoves(newPos).map((m) => toUci(m).slice(2, 4)));
+    position = newPos;
+    return true;
+  },
+});
+board.setLegalMoves(getLegalMoves(position).map((m) => toUci(m).slice(2, 4)));
+```
+
+**Docs:** [chess-core — Getting started & API](https://eduardopech.github.io/chess-core/)
 
 ## Development
 
