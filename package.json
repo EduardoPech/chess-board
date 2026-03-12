@@ -1,6 +1,6 @@
 {
   "name": "@pech/chess-board",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chess board UI library — render and interact with chess positions",
   "type": "module",
   "main": "./dist/index.cjs",
