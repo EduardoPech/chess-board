@@ -2,6 +2,8 @@
 
 Chess board UI library — render and interact with chess positions. Supports FEN, drag-and-drop, custom piece/board themes, arrows, last-move and legal-move highlights. Built to work with [@pech/chess-core](https://github.com/EduardoPech/chess-core) for rules and move validation.
 
+**Documentation:** [https://eduardopech.github.io/chess-board](https://eduardopech.github.io/chess-board)
+
 ## Install
 
 ```bash

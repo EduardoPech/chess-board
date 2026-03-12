@@ -1,0 +1,39 @@
+---
+title: Interactive example
+description: Playable board using chess-board for the UI and chess-core for move validation and state.
+---
+
+This example uses **chess-board** for the UI and **@pech/chess-core** for game logic: only legal moves are accepted, and the position and legal-move highlights update after each move.
+
+import ChessExample from '../../../components/ChessExample';
+
+<ChessExample client:load />
+
+## How it works
+
+The board is wired to chess-core in `onMove`: we resolve the move with `fromUci(position, from + to)`. If that returns a move, we apply it with `makeMove`, then update the board and legal moves:
+
+```ts
+import { ChessBoard, STARTING_FEN } from '@pech/chess-board';
+import { fromFen, toFen, getLegalMoves, makeMove, fromUci, toUci } from '@pech/chess-core';
+
+let position = fromFen(STARTING_FEN);
+const board = new ChessBoard(container, {
+  position: STARTING_FEN,
+  draggable: true,
+  onMove(from, to) {
+    const move = fromUci(position, from + to);
+    if (!move) return false;
+
+    const newPos = makeMove(position, move);
+    board.setPosition(toFen(newPos));
+    board.setLastMove(from, to);
+    board.setLegalMoves(getLegalMoves(newPos).map((m) => toUci(m).slice(2, 4)));
+    position = newPos;
+    return true;
+  },
+});
+board.setLegalMoves(getLegalMoves(position).map((m) => toUci(m).slice(2, 4)));
+```
+
+UCI format is `from + to` (e.g. `e2e4`), so the "to" square for highlights is `toUci(move).slice(2, 4)`.

@@ -5,3 +5,7 @@ dist/
 .env
 .env.*
 coverage/
+
+# Docs (Starlight/Astro)
+docs/dist/
+docs/node_modules/
