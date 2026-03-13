@@ -277,8 +277,6 @@ export class ChessBoard {
     animate: boolean,
   ): void {
     const diff = diffPieces(this.pieces, newPieces);
-    const movedToSquares = diff.moved.map((m) => m.to);
-    const domOrderBefore = Array.from(this.boardEl.querySelectorAll('.cb-piece')).map((el) => el.getAttribute('data-square'));
 
     const totalChanges =
       diff.moved.length + diff.added.length + diff.removed.length;
