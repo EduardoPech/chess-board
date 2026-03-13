@@ -254,7 +254,10 @@ export class ChessBoard {
   // Rendering internals
   // ────────────────────────────────────────────────────────────────────
   private renderAllPieces(): void {
-    for (const el of this.pieceEls.values()) el.remove();
+    // Remove all existing piece elements from the DOM, not only those
+    // tracked in pieceEls, to avoid leaving orphaned nodes around.
+    const existing = this.boardEl.querySelectorAll('.cb-piece');
+    existing.forEach((el) => el.remove());
     this.pieceEls.clear();
     for (const [sq, piece] of this.pieces) {
       const el = createPieceEl(
@@ -274,6 +277,17 @@ export class ChessBoard {
     animate: boolean,
   ): void {
     const diff = diffPieces(this.pieces, newPieces);
+    const movedToSquares = diff.moved.map((m) => m.to);
+    const domOrderBefore = Array.from(this.boardEl.querySelectorAll('.cb-piece')).map((el) => el.getAttribute('data-square'));
+
+    const totalChanges =
+      diff.moved.length + diff.added.length + diff.removed.length;
+    if (totalChanges > 8) {
+      this.pieces = newPieces;
+      this.renderAllPieces();
+      this.updateOccupied();
+      return;
+    }
 
     // Process removed first so captured pieces are gone before we move
     // the capturing piece to their square (avoid overwriting pieceEls).
