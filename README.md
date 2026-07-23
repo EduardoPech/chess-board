@@ -39,6 +39,24 @@ board.destroy();
 
 The board is keyboard-accessible by default (Tab in, arrow keys, Enter/Space, Escape) unless `viewOnly` is set. Right-drag draws an arrow; a plain right-click toggles a circle. Pass `promotionPicker: true` for a built-in promotion-piece picker — `onMove` then receives the chosen piece as a third argument.
 
+### Promotion picker
+
+Set `promotionPicker: true` to show a built-in overlay (queen/rook/bishop/knight) whenever a pawn reaches the last rank. `onMove`'s third argument is the chosen piece:
+
+```ts
+const board = new ChessBoard(container, {
+  promotionPicker: true,
+  onMove(from, to, promotion) {
+    // `promotion` is set (e.g. 'queen') only when the picker resolved a
+    // choice for this move — undefined for every other move.
+    console.log(from, to, promotion);
+    return true;
+  },
+});
+```
+
+If the user clicks away from the picker instead of choosing, `onMove` is never called — the move is cancelled and the piece returns to its origin square. See [Promotion picker](https://eduardopech.github.io/chess-board/guides/promotion/) for a full example wired to `@pech/chess-core`.
+
 ## Options
 
 | Option | Type | Description |
