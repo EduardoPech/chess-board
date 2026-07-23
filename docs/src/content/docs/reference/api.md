@@ -20,7 +20,7 @@ description: chess-board public API reference.
 
 ## Types
 
-`SquareKey`, `FileChar`, `RankChar`, `Color`, `PieceType`, `Piece`, `Arrow`, `BoardTheme`, `PieceTheme`, `ChessBoardOptions`.
+`SquareKey`, `FileChar`, `RankChar`, `Color`, `PieceType`, `Piece`, `Arrow`, `Circle`, `BoardTheme`, `PieceTheme`, `ChessBoardOptions`.
 
 ## Board methods
 
@@ -29,4 +29,9 @@ description: chess-board public API reference.
 - **Selection:** `select(square | null)`.
 - **Highlights:** `setLastMove(from, to)`, `clearLastMove()`, `setCheck(square | null)`, `setLegalMoves(squares)`, `clearLegalMoves()`.
 - **Arrows:** `setArrows(arrows)`, `addArrow(from, to, color?)`, `removeArrow(from, to)`, `clearArrows()`.
+- **Circles:** `setCircles(circles)`, `addCircle(square, color?)`, `removeCircle(square)`, `clearCircles()`.
 - **Lifecycle:** `destroy()`.
+
+## Accessibility
+
+With `keyboard: true` (the default unless `viewOnly`), the board exposes a roving-tabindex grid (`role="grid"` / `role="gridcell"`): Tab into the board, arrow keys move focus one square at a time (orientation-aware), Enter/Space selects or moves like a click, and Escape deselects. Selection and move events are announced through a visually-hidden `aria-live="polite"` region.

@@ -6,6 +6,7 @@ export type {
   PieceType,
   Piece,
   Arrow,
+  Circle,
   BoardTheme,
   PieceTheme,
   ChessBoardOptions,
