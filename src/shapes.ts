@@ -1,4 +1,4 @@
-import type { Arrow, Color, SquareKey } from './types.ts';
+import type { Arrow, Circle, Color, SquareKey } from './types.ts';
 import { squareToCoords } from './coords.ts';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -54,12 +54,33 @@ function createArrowEl(arrow: Arrow, orientation: Color): SVGGElement {
   return g;
 }
 
-export function renderArrows(
+function createCircleEl(circle: Circle, orientation: Color): SVGCircleElement {
+  const color = circle.color ?? DEFAULT_COLOR;
+  const [cx, cy] = squareCenter(circle.square, orientation);
+
+  const el = document.createElementNS(SVG_NS, 'circle');
+  el.setAttribute('data-circle', circle.square);
+  el.setAttribute('cx', String(cx));
+  el.setAttribute('cy', String(cy));
+  el.setAttribute('r', '5.4');
+  el.setAttribute('fill', 'none');
+  el.setAttribute('stroke', color);
+  el.setAttribute('stroke-width', '2');
+  el.setAttribute('opacity', '0.85');
+  return el;
+}
+
+/** Renders both arrows and circles into the shared SVG overlay. */
+export function renderShapes(
   svgEl: SVGSVGElement,
   arrows: readonly Arrow[],
+  circles: readonly Circle[],
   orientation: Color,
 ): void {
   svgEl.replaceChildren();
+  for (const circle of circles) {
+    svgEl.appendChild(createCircleEl(circle, orientation));
+  }
   for (const arrow of arrows) {
     svgEl.appendChild(createArrowEl(arrow, orientation));
   }

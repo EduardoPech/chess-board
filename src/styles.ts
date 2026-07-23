@@ -97,6 +97,31 @@ const STYLES = /* css */ `
   cursor: grabbing;
   transition: none !important;
 }
+
+/* Ghost piece left behind at the drag origin while dragging */
+.cb-piece.cb-ghost {
+  opacity: 0.35;
+}
+
+/* Piece added to the board (e.g. capture arrival, position reset) */
+.cb-piece.cb-fade-in {
+  animation: cb-fade-in var(--cb-anim-duration, 150ms) ease-out;
+}
+@keyframes cb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Piece removed from the board (e.g. captured) */
+.cb-piece.cb-fade-out {
+  transition: opacity var(--cb-anim-duration, 150ms) ease-in;
+  opacity: 0;
+}
+
+/* Square under the pointer while dragging a piece over it */
+.cb-square.cb-drag-over {
+  box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.3);
+}
 .cb-piece img,
 .cb-piece svg {
   width: var(--cb-piece-size, 85%);
@@ -120,6 +145,61 @@ const STYLES = /* css */ `
 .cb-coord-rank { left: 2px;  top: 1px; }
 .cb-coord.cb-on-light { color: var(--cb-dark-sq); }
 .cb-coord.cb-on-dark  { color: var(--cb-light-sq); }
+
+/* Promotion picker */
+.cb-promotion-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+}
+.cb-promotion-picker {
+  position: absolute;
+  width: 12.5%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  background: var(--cb-promotion-bg, #fff);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.cb-promotion-choice {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--cb-promotion-choice-bg, #f0f0f0);
+}
+.cb-promotion-choice:hover {
+  background: var(--cb-promotion-choice-hover-bg, #d9d9d9);
+}
+.cb-promotion-choice svg,
+.cb-promotion-choice img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Visually hidden but readable by screen readers */
+.cb-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focused square outline for keyboard navigation */
+.cb-square:focus-visible {
+  outline: 3px solid var(--cb-focus-ring, #4a90d9);
+  outline-offset: -3px;
+  z-index: 4;
+}
 
 /* SVG overlay for arrows */
 .cb-svg {

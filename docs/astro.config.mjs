@@ -20,6 +20,9 @@ export default defineConfig({
                 items: [
                     { label: 'Example', slug: 'guides/example' },
                     { label: 'Options', slug: 'guides/options' },
+                    { label: 'Arrows & circles', slug: 'guides/shapes' },
+                    { label: 'Promotion picker', slug: 'guides/promotion' },
+                    { label: 'Keyboard accessibility', slug: 'guides/keyboard' },
                     { label: 'Integration with chess-core', slug: 'guides/integration-chess-core' },
                 ],
             },

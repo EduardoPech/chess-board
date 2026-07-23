@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ChessBoard, STARTING_FEN } from '@pech/chess-board';
+import { ChessBoard, STARTING_FEN, type PieceType } from '@pech/chess-board';
 import {
   fromFen,
   toFen,
@@ -8,6 +8,17 @@ import {
   fromUci,
   toUci,
 } from '@pech/chess-core';
+
+// chess-board's promotion type is the full word ('queen'); UCI wants the
+// single SAN letter chess-core's fromUci expects as a 5th character.
+const PROMO_TO_UCI: Record<PieceType, string> = {
+  queen: 'q',
+  rook: 'r',
+  bishop: 'b',
+  knight: 'n',
+  king: '',
+  pawn: '',
+};
 
 export default function ChessExample() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -22,8 +33,9 @@ export default function ChessExample() {
       orientation: 'white',
       draggable: true,
       coordinates: true,
-      onMove(from, to) {
-        const uci = from + to;
+      promotionPicker: true,
+      onMove(from, to, promotion) {
+        const uci = from + to + (promotion ? PROMO_TO_UCI[promotion] : '');
         const move = fromUci(position, uci);
         if (!move) return false;
 
